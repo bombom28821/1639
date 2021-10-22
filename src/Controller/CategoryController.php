@@ -22,4 +22,19 @@ class CategoryController extends AbstractController
                         ]
         );
     }
+    #[Route('/delete/{id}', name: 'delete_category')]
+    public function deleteCategoryAction($id)
+    {
+        $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
+
+        if(!$category){
+            
+            return $this->redirectToRoute('index_category');           
+        }
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($category);
+        $manager->flush();
+        $this->addFlash('Warn', 'Deleted category successfully!!');
+        return $this->redirectToRoute('index_category');  
+    }
 }
