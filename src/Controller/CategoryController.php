@@ -28,7 +28,7 @@ class CategoryController extends AbstractController
         $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
 
         if(!$category){
-            
+            $this->addFlash('Error', 'Category not found!');
             return $this->redirectToRoute('index_category');           
         }
         $manager = $this->getDoctrine()->getManager();
