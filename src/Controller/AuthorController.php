@@ -21,4 +21,21 @@ class AuthorController extends AbstractController
             'authors' => $authors,
         ]);
     }
+
+    #[Route('/author/detail/{id}', name: 'detail_author')]
+    public function authorDetailAction($id)
+    {
+        $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
+        if (!$author) {
+            $this->addFlash('Error', 'Author not found !');
+            return $this->redirectToRoute('index_author');
+        } else {
+            return $this->render(
+                'author/detail.html.twig',
+                [
+                    'author' => $author,
+                ]
+            );
+        }
+    }
 }
