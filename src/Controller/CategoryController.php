@@ -34,7 +34,7 @@ class CategoryController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $manager->remove($category);
         $manager->flush();
-        $this->addFlash('Warn', 'Deleted category successfully!!');
+        $this->addFlash('Warn', 'Deleted category successfully!');
         return $this->redirectToRoute('index_category');  
     }
 }
