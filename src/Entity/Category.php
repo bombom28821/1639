@@ -24,10 +24,7 @@ class Category
      */
     private $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Book::class, mappedBy="Category")
-     */
-    private $Books;
+
 
     public function __construct()
     {
@@ -47,36 +44,6 @@ class Category
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Book[]
-     */
-    public function getBooks(): Collection
-    {
-        return $this->Books;
-    }
-
-    public function addBook(Book $Book): self
-    {
-        if (!$this->Books->contains($Book)) {
-            $this->Books[] = $Book;
-            $Book->setCategory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBook(Book $Book): self
-    {
-        if ($this->Books->removeElement($Book)) {
-            // set the owning side to null (unless already changed)
-            if ($Book->getCategory() === $this) {
-                $Book->setCategory(null);
-            }
-        }
 
         return $this;
     }

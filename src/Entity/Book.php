@@ -50,19 +50,17 @@ class Book
     private $manufacturer;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", options={"default" : 0})
      */
     private $orderQuantity;
 
     /**
      * @ORM\ManyToMany(targetEntity=Author::class, inversedBy="books")
-     * @ORM\JoinColumn(nullable=false)
      */
-    private $Authors;
+    private $Author;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="books")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $Category;
 
@@ -100,14 +98,16 @@ class Book
         return $this;
     }
 
-    public function getCover(): ?string
+    public function getCover()
     {
         return $this->cover;
     }
 
-    public function setCover(string $cover): self
+    public function setCover($cover)
     {
-        $this->cover = $cover;
+        if($cover){
+            $this->cover = $cover;
+        }
 
         return $this;
     }
@@ -165,13 +165,13 @@ class Book
      */
     public function getAuthor(): Collection
     {
-        return $this->Authors;
+        return $this->Author;
     }
 
     public function addAuthor(Author $idAuthor): self
     {
-        if (!$this->Authors->contains($idAuthor)) {
-            $this->Authors[] = $idAuthor;
+        if (!$this->Author->contains($idAuthor)) {
+            $this->Author[] = $idAuthor;
         }
 
         return $this;
@@ -179,7 +179,7 @@ class Book
 
     public function removeAuthor(Author $idAuthor): self
     {
-        $this->Authors->removeElement($idAuthor);
+        $this->Author->removeElement($idAuthor);
 
         return $this;
     }

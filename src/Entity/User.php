@@ -151,10 +151,17 @@ class User
         return $this->cart;
     }
 
-    public function setCart(?array $cart): self
+    public function addCart($idBook)
     {
-        $this->cart = $cart;
-
+        $idBooks = $this->cart;
+        array_push($idBooks, $idBook);
+        $this->cart = $idBooks;
+        return $this;
+    }
+    public function removeCart($idBook)
+    {
+        $idBooks = array_diff( $this->cart, [$idBook]);    
+        $this->cart = $idBooks;
         return $this;
     }
 }
