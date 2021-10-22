@@ -38,4 +38,19 @@ class AuthorController extends AbstractController
             );
         }
     }
+
+    #[Route('/delete/{id}', name: 'delete_author')]
+    public function deleteAuthorAction($id)
+    {
+        $author = $this->getDoctrine()->getRepository(Author::class)->find($id);
+        if (!$author) {
+            $this->addFlash('Error', 'Author not found!');
+        } else {
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($author);
+            $manager->flush();
+            $this->addFlash('Warn', 'Deleted author successfully!!');
+        }
+        return $this->redirectToRoute('index_author');
+    }
 }
