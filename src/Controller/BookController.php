@@ -21,4 +21,21 @@ class BookController extends AbstractController
             'books' => $books,
         ]);
     }
+
+    #[Route('/book/detail/{id}', name: 'detail_book')]
+    public function bookDetailAction($id)
+    {
+        $book = $this->getDoctrine()->getRepository(Book::class)->find($id);
+        if (!$book) {
+            $this->addFlash('Error', 'Book not found !');
+            return $this->redirectToRoute('index_book');
+        } else {
+            return $this->render(
+                'book/detail.html.twig',
+                [
+                    'book' => $book,
+                ]
+            );
+        }
+    }
 }
