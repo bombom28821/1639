@@ -38,4 +38,19 @@ class BookController extends AbstractController
             );
         }
     }
+
+    #[Route('/delete/{id}', name: 'delete_book')]
+    public function deleteBookAction($id)
+    {
+        $book = $this->getDoctrine()->getRepository(Book::class)->find($id);
+        if (!$book) {
+            $this->addFlash('Error', 'Book not found!');
+        } else {
+            $manager = $this->getDoctrine()->getManager();
+            $manager->remove($book);
+            $manager->flush();
+            $this->addFlash('Warn', 'Deleted book successfully!!');
+        }
+        return $this->redirectToRoute('index_book');
+    }
 }
