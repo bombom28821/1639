@@ -54,4 +54,33 @@ class HomeController extends AbstractController
             'idCategory' => $id
         ]);
     }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
+    #[Route('cart/add/{id}', name: 'add_cart')]
+    public function addBookInCart(Request $request, $id)
+    {
+        $user = $this->getUser();
+        $user->addCart($id);
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($user);
+        $manager->flush();
+
+        $refere = $request->headers->get('referer');
+        return $this->redirect($refere);
+    }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
+    #[Route('cart/remove/{id}', name: 'remove_cart')]
+    public function removeBookInCart(Request $request, $id)
+    {
+        $user = $this->getUser();
+        $user->removeCart($id);
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($user);
+        $manager->flush();
+        $refere = $request->headers->get('referer');
+        return $this->redirect($refere);
+    }
 }
