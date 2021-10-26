@@ -42,4 +42,16 @@ class HomeController extends AbstractController
             );
         }
     }
+    #[Route('books/category/{id}', name: 'show_book_by_category')]
+    public function showBookByCategoryAction($id)
+    {
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        $books = $this->getDoctrine()->getRepository(Book::class)->findBy(array('Category' => $id));
+
+        return $this->render('home/index.html.twig', [
+            'categories' => $categories,
+            'books' => $books,
+            'idCategory' => $id
+        ]);
+    }
 }
