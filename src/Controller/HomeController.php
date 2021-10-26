@@ -26,5 +26,20 @@ class HomeController extends AbstractController
             'idCategory' => false,
         ]);
     }
-
+    #[Route('/book/{id}', name: 'detail_book_user')]
+    public function bookDetailAction($id)
+    {
+        $book = $this->getDoctrine()->getRepository(Book::class)->find($id);
+        if (!$book) {
+            $this->addFlash('Error', 'Book not found !');
+            return $this->redirectToRoute('index');
+        } else {
+            return $this->render(
+                'home/bookDetail.html.twig',
+                [
+                    'book' => $book,
+                ]
+            );
+        }
+    }
 }
