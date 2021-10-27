@@ -83,4 +83,21 @@ class HomeController extends AbstractController
         $refere = $request->headers->get('referer');
         return $this->redirect($refere);
     }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
+    #[Route('cart/view', name: 'show_cart')]
+    public function showCart()
+    {
+        $books = [];
+        $user = $this->getUser();
+        $idBooks = $user->getCart(); //[1,3,4,5,3]
+        foreach ($idBooks as $idBook) {
+            $book = $this->getDoctrine()->getRepository(Book::class)->find($idBook);
+            array_push($books, $book);
+        }
+        return $this->render('home/cart.html.twig', [
+            'books' => $books,
+        ]);
+    }
 }
