@@ -82,7 +82,13 @@ class CategoryController extends AbstractController
         }
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
-        
+        if($form->isSubmitted() && $form->isValid()) {
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($category);
+            $manager->flush();
+            $this->addFlash('Success', 'Edit category successfully!!');
+            return $this->redirectToRoute('index_category');
+        }
         return $this->render('category/add-edit.html.twig',
         [
             'form' => $form->createView(),
