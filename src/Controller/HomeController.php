@@ -100,4 +100,73 @@ class HomeController extends AbstractController
             'books' => $books,
         ]);
     }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
+    #[Route('cart/order', name: 'order_cart')]
+    public function orderCart()
+    {
+        $idBooks = $_POST['idBooks'];
+        $orderQuantityForm = $_POST['orderQuantity'];
+
+        $user = $this->getUser();
+        $totalPrice = 0;
+        $orderQuantity = [];
+        foreach ($orderQuantityForm as $order) {
+            if ($order != null) {
+                array_push($orderQuantity, $order);
+            }
+        }
+
+        for ($i = 0; $i < count($idBooks); $i++) {
+            $book = $this->getDoctrine()->getRepository(Book::class)->find($idBooks[$i]);
+            $user->removeCart($book->getId());
+            $totalPrice += $book->getPrice() * $orderQuantity[$i];
+            $book->addOrderQuantity($orderQuantity[$i]);
+        }
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($user);
+        $manager->flush();
+
+        $order = $this->createOrder($user, $totalPrice);
+
+        for ($i = 0; $i < count($idBooks); $i++) {
+            $book = $this->getDoctrine()->getRepository(Book::class)->find($idBooks[$i]);
+            $this->createOrderDetail($order, $book, $orderQuantity[$i]);
+        }
+        return $this->render('home/order.html.twig', [
+            'idBooks' => $idBooks,
+            'orderQuantity' => $orderQuantity,
+            'totalPrice' =>  $totalPrice,
+        ]);
+    }
+    public function createOrder($User, $totalPrice)
+    {
+
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $dateNow = new DateTime();
+
+        $order = new Order();
+        $order->setUser($User);
+        $order->setTotalPrice($totalPrice);
+        $order->setOrderDate($dateNow);
+        $order->setStatus('To Pay');
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($order);
+        $manager->flush();
+
+        return $order;
+    }
+    public function createOrderDetail($order, $book, $quantity)
+    {
+        $orderDetail = new OrderDetail();
+        $orderDetail->setOrder($order);
+        $orderDetail->setBook($book);
+        $orderDetail->setQuantity($quantity);
+
+        $manager = $this->getDoctrine()->getManager();
+        $manager->persist($orderDetail);
+        $manager->flush();
+    }
 }
