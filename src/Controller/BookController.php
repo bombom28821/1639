@@ -53,4 +53,49 @@ class BookController extends AbstractController
         }
         return $this->redirectToRoute('index_book');
     }
+
+    #[Route('/add', name: 'add_book')]
+    public function addbookAction(Request $request)
+    {
+        $book = new Book();
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            //code xử lý ảnh upload
+            //B1: Lấy dữ liệu ảnh từ file upload
+            $image = $book->getCover();
+            //B2: tạo tên mới cho ảnh => tên file ảnh là duy nhất
+            $imgName = uniqid(); //unique ID
+            //B3: lấy ra đuôi (extension) của ảnh
+            $imgExtension = $image->guessExtension();
+            //B4: gộp tên mới + đuôi tạo thành tên file ảnh hoàn thiện
+            $imageName = $imgName . "." . $imgExtension;
+            //B5: di chuyển file ảnh upload vào thư mục chỉ định
+            try {
+                $image->move(
+                    $this->getParameter('book_cover'),
+                    $imageName
+                    //Lưu ý: cần khai báo tham số đường dẫn của thư mục cho "book_cover" ở file config/services.yaml
+                );
+            } catch (FileException $e) {
+                // throwException($e);
+            }
+            //B6: lưu tên vào database
+            $book->setCover($imageName);
+            $book->setOrderQuantity(0);
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($book);
+            $manager->flush();
+
+            $this->addFlash('Success', 'Add book successfully!');
+            return $this->redirectToRoute('index_book');
+        }
+        return $this->render(
+            'book/add-edit.html.twig',
+            [
+                'form' => $form->createView(),
+                'edit' => false,
+            ]
+        );
+    }
 }
