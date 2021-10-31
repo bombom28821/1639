@@ -4,15 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * @IsGranted("ROLE_STAFF")
- */
 #[Route('/category')]
 class CategoryController extends AbstractController
 {
@@ -25,6 +21,21 @@ class CategoryController extends AbstractController
                             'categories' => $categories,
                         ]
         );
+    }
+    #[Route('/delete/{id}', name: 'delete_category')]
+    public function deleteCategoryAction($id)
+    {
+        $category = $this->getDoctrine()->getRepository(Category::class)->find($id);
+
+        if(!$category){
+            $this->addFlash('Error', 'Category not found!');
+            return $this->redirectToRoute('index_category');           
+        }
+        $manager = $this->getDoctrine()->getManager();
+        $manager->remove($category);
+        $manager->flush();
+        $this->addFlash('Warn', 'Deleted category successfully!');
+        return $this->redirectToRoute('index_category');  
     }
     #[Route('/delete/{id}', name: 'delete_category')]
     public function deleteCategoryAction($id)
@@ -51,7 +62,7 @@ class CategoryController extends AbstractController
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($category);
             $manager->flush();
-            $this->addFlash('Success', 'Add category successfully!!');
+            $this->addFlash('Success', 'Add category successfully!');
             return $this->redirectToRoute('index_category');
         }
         return $this->render('category/add-edit.html.twig',
@@ -75,7 +86,7 @@ class CategoryController extends AbstractController
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($category);
             $manager->flush();
-            $this->addFlash('Success', 'Edit category successfully!!');
+            $this->addFlash('Success', 'Edit category successfully !');
             return $this->redirectToRoute('index_category');
         }
         return $this->render('category/add-edit.html.twig',
