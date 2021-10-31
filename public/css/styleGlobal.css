@@ -1,0 +1,224 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    font-size: 16px;
+    color: #212121;
+    background-color: #ebebeb;
+    font-family: 'Roboto', sans-serif;
+}
+header{
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+.header_logo{
+    flex-grow: 2;
+}
+.header_search{
+    flex-grow: 6;
+}
+.header_navbar{
+    flex-grow: 3;
+    display: flex;
+    justify-content: flex-end;
+}
+header a{
+    text-decoration: none;
+}
+.header_logo a{
+    color: #212121;
+}
+.header_logo a span:first-child{
+    color: #e63232;
+    font-size: 32px;
+}
+.header_logo a span:last-child{
+    font-size: 30px;
+    font-weight: 600;
+}
+.header_search .form-search{
+    position: relative;
+}
+.header_search .form-search input{
+    border-radius: 7px;
+    padding-right: 0;
+    width: 100%;
+    border: 1px solid #ced4da;
+    padding: 5px 0 5px 10px;
+
+}
+.header_search .form-search input:focus{
+    outline: none;
+    border-color: #ced4da;
+}
+.btn-searchNameBook{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: #b8b7b4;
+    width: 44px;
+    height: 36px;
+    line-height: 36px;
+    text-align:center;
+    border: 1px solid #ced4da;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    transition: all 0.3s;
+
+}
+.header_search .form-search .btn-searchNameBook:hover{
+    background-color: #dddedc;
+    color: #5c5c5b;
+}
+.header_nav{
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+.header_navbar ul{
+    list-style: none;
+}
+
+.header_avatar a img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.header-avatar span {
+    padding: 0 5px;
+}
+.dropdown-menu-fix li a{
+   color: #212121;
+}
+.dropdown-menu.show{
+    margin-top: 15px !important;
+}
+.header_nav li{
+    padding: 0 15px;
+}
+
+.header_nav li a{
+    color: #212121;
+}
+.header_nav li a:hover{
+    color: #6b6a6a;
+}
+.header_nav li .icon-cart{
+    font-size: 22px;
+}
+.header_nav li .icon-cart span i{
+    width: 42px;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+    border-radius: 50%;
+    color: #212121;
+    transition: all .5s;
+}
+.header_nav li .icon-cart span i:hover{
+    background-color: #dddedc;
+    color: #444343;
+}
+.header_nav li .icon-cart:hover {
+    color: #fff;
+}
+.header_nav .header-manage{
+    margin-right: 60px;
+}
+.header_nav .header-manage .dropdown-toggle{
+    font-size: 20px;
+}
+.header_nav .header-manage .manage{
+    font-size: 20px;
+}
+.dropdown-menu-fix li a:hover{
+    color: #6b6a6a;
+    background-color: #e9ecef;
+}
+.header_nav .li-cart{
+    position: relative;
+}
+.header_nav .li-cart .countCart{
+    position: absolute;
+    top: 0;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    line-height: 22px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: rgba(237, 237, 237, 0.7);
+    font-weight: 600;
+    color: #ed8442;
+}
+/* FOOTER  */
+footer{
+    background-color: #fff;
+    padding: 40px 0 15px;
+}
+.footer_top{
+    width: 80%;
+    margin: 0 auto;
+}
+.footer_content .footer_top{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+}
+.footer_text{
+    padding: 0 15px;
+}
+.footer_text h2{
+    font-weight: 600;
+    padding-bottom: 10px;
+}
+.footer_text:first-child p{
+    line-height: 30px;
+}
+.footer_socials i{
+    width: 30px;
+    height: 30px;
+    font-size: 17px;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 5px;
+    background-color: #ebebeb;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all .5s;
+}
+.footer_socials i:first-child{
+    color: #2a9eeb;
+}
+.footer_socials i:nth-child(2){
+    color: #f03c24;
+}
+.footer_socials i:nth-child(3){
+    color: #0ea8f0;
+}
+.footer_socials i:last-child{
+    color: #d23ef0;
+}
+.footer_socials i:hover{
+    color: #fff;
+    background-color: #45aaed;
+}
+.footer_text:nth-child(2) p i{
+    color: #f03c24;
+    font-size: 20px;
+    margin-right: 5px;
+}
+.footer_img img{
+    padding-right: 5px;
+    padding-bottom: 5px;
+}
+.footer_bottom p{
+    text-align: center;
+    margin-bottom: 0;
+    padding-top: 20px;
+    border-top: 1px solid #b8b7b4;
+}

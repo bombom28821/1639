@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<div class="container-fluid col-7 mt-3">
+		<h2 class="text-center mt-5">
+			{% if edit %}
+				EDIT CATEGORY
+			{% else %}
+				ADD NEW CATEGORY
+			{% endif %}
+		</h2>
+		{{form_start(form)}}
+		<div class="form-group">
+			{{ form_label(form.name) }}
+			{{ form_widget(form.name,
+            {
+                'attr': {'class': 'form-control'},
+            })
+            }}
+		</div>
+		<div class="form-group text-center mt-3">
+			<button class="btn btn-primary" type="submit">
+				{% if edit %}
+					SAVE
+				{% else %}
+					ADD
+				{% endif %}
+			</button>
+		</div>
+		{{form_end(form)}}
+	</div>
+{% endblock %}

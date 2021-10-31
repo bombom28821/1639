@@ -1,0 +1,193 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Shopping Cart
+{% endblock %}
+{% block styleCSS %}
+	<link rel="stylesheet" href="/css/styleHome.css">
+{% endblock %}
+{% block message %}{% endblock %}
+{% block body %}
+	{# COVER #}
+	<div class="cover">
+		<div class="cover_content">
+			<div class="cover_img">
+				<img src="/images/home/bg.png" alt="">
+			</div>
+			<div class="cover_text">
+				<div class="cover_title">
+					<h1>This Month</h1>
+				</div>
+				<div class="cover_line"></div>
+				<div class="cover_description">
+					Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, voluptates optio. Itaque ducimus accusantium tenetur.
+				</div>
+				<div class="cover_btn">
+					<a href="#category">READ MORE</a>
+				</div>
+				<div class="cover_bubble">
+					<span>10%</span>
+					<p>off</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	{# CONNECT #}
+	<div class="connect">
+		<div class="connect_content">
+			<img src="/images/home/logo-lazada.png" alt="logo-lazada">
+			<img src="/images/home/logo-shopee.png" alt="logo-shoppe">
+			<img src="/images/home/logo-tiki.png" alt="logo-tiki">
+			<img src="/images/home/logo-shendo.png" alt="logo-shendo">
+		</div>
+	</div>
+	{# PRODUCT #}
+	<div class="product">
+		<div class="product_category">
+			<h2 id="category">Category</h2>
+			<ul>
+				{% if idCategory == false %}
+					<li>
+						<a class="active" href=" {{ path('index') }} ">Show All</a>
+					</li>
+				{% else %}
+					<li>
+						<a class="" href=" {{ path('index') }} ">Show All</a>
+					</li>
+				{% endif %}
+
+				{% for c in categories %}
+					{% if idCategory == c.id %}
+						<li>
+							<a class="active" href=" {{ path('show_book_by_category',{'id': c.id}) }} ">{{ c.name }}</a>
+						</li>
+					{% else %}
+						<li>
+							<a class="" href=" {{ path('show_book_by_category',{'id': c.id}) }} ">{{ c.name }}</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="product_book">
+			{% for c in categories %}
+				{% if idCategory == c.id %}
+					<h2>{{ c.name }}</h2>
+				{% endif %}
+			{% endfor %}
+			{% if idCategory == false %}
+				<h2>Show All</h2>
+			{% endif %}
+			<div class="product_listbook">
+				{% for b in books %}
+					<div class="product_content">
+						<div class="product_top">
+							<div class="product_img">
+								<a href=" {{ path('detail_book_user', {'id' : b.id} ) }} ">
+									<img src="{{ asset('images/book/'~b.cover) }}" alt="book">
+								</a>
+							</div>
+							<div class="product_text">
+								<p>
+									{{ b.name }}</p>
+								<p>
+									{% for a in b.author %}
+										{% if a == b.author|last or b.author|length == 1 %}
+											<span>{{a.name}}</span>
+										{% else %}
+											<span>{{a.name}},
+											</span>
+										{% endif %}
+									{% endfor %}
+								</p>
+								<p>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+								</p>
+								<p>{{b.description}}</p>
+							</div>
+						</div>
+						<div class="product_bottom">
+							<p>
+								{{ b.price }}$</p>
+							{% if b.quantity - b.orderQuantity > 0 %}
+								{% if is_granted('ROLE_STAFF') == false and is_granted('ROLE_ADMIN') == false %}
+									{% set bookInCart = false %}
+									{% if app.user %}
+										{% for idBook in app.user.cart %}
+											{% if idBook == b.id %}
+												{% set bookInCart = true %}
+											{% endif %}
+										{% endfor %}
+									{% endif %}
+									{% if bookInCart == false %}
+										<p>
+											<a href=" {{ path('add_cart',{'id' : b.id} ) }} ">Add Cart</a>
+										</p>
+									{% else %}
+										<p>
+											<a href=" {{ path('remove_cart',{'id' : b.id} ) }} ">Remove Cart</a>
+										</p>
+									{% endif %}
+								{% endif %}
+							{% else %}
+								<p>
+									<span class="text-danger">SOLD OUT</span>
+								</p>
+							{% endif %}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	{# INTRO #}
+	<div class="intro">
+		<div class="intro_text">
+			<p>"Life is a book and there are a thounsand pages,</p>
+			<p>I have not yet read"</p>
+		</div>
+	</div>
+	{# MANUFACTURER #}
+	<div class="manufacturer">
+		<div class="manufacturer_content">
+			<img src="/images/home/book_manufacturer1.png" alt="book_manufacturer">
+			<img src="/images/home/book_manufacturer2.png" alt="book_manufacturer">
+			<img src="/images/home/book_manufacturer3.png" alt="book_manufacturer">
+			<img src="/images/home/book_manufacturer4.png" alt="book_manufacturer">
+		</div>
+	</div>
+	<div class="suggest">
+		<div class="suggest_content">
+			<div class="suggest_item">
+				<div class="suggest_img">
+					<img src="/images/home/suggest1.jpg" alt="suggest">
+				</div>
+				<div class="suggest_text">
+					<p>Best Book Editions for 2021</p>
+					<p>28 October 2021</p>
+				</div>
+			</div>
+			<div class="suggest_item">
+				<div class="suggest_img">
+					<img src="/images/home/suggest2.jpg" alt="suggest">
+				</div>
+				<div class="suggest_text">
+					<p>Most Popular Design Books</p>
+					<p>29 October 2020</p>
+				</div>
+			</div>
+			<div class="suggest_item">
+				<div class="suggest_img">
+					<img src="/images/home/suggest3.jpg" alt="suggest">
+				</div>
+				<div class="suggest_text">
+					<p>Most Popular Editions of Art</p>
+					<p>30 October 2021</p>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

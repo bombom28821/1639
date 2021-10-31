@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Show Order Detail{% endblock %}
+
+{% block body %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No .</th>
+      <th scope="col">Avatar</th>
+      <th scope="col">Book Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Description</th>
+      <th scope="col">Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for o in orderDetails %}
+        <tr>
+            <th scope="row">{{loop.index}}</th>
+            <td>
+                <img src="{{ asset('/images/book/'~o.book.cover) }}" alt="product" width=100 height=120>
+            </td>
+            <td>{{o.book.name}}</td>
+            <td>{{o.book.price}}$</td>
+            <td>{{o.book.description}}</td>
+            <td>{{o.quantity}}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

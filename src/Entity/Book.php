@@ -153,9 +153,17 @@ class Book
         return $this->orderQuantity;
     }
 
-    public function setOrderQuantity(?int $orderQuantity): self
+    public function removeOrderQuantity(?int $orderQuantity): self
     {
-        $this->orderQuantity = $orderQuantity;
+        $orderQuantityInBook = $this->orderQuantity - $orderQuantity;
+        $this->orderQuantity = $orderQuantityInBook;
+
+        return $this;
+    }
+    public function addOrderQuantity(?int $orderQuantity): self
+    {
+        $orderQuantityInBook = $this->orderQuantity + $orderQuantity;
+        $this->orderQuantity = $orderQuantityInBook;
 
         return $this;
     }

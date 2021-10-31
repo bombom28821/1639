@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Show All Order!
+{% endblock %}
+{% block styleCSS %}
+	<style>
+		{% for o in orders %}
+			{% if o.status == 'Cancel order' %}
+				.row-order{{o.id}}{
+					background-color: #f2cfc9;
+				}
+			{% endif %}
+		{% endfor %}
+	</style>
+
+{% endblock %}
+{% block body %}
+	<div class="container">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">ID</th>
+						{% if is_granted('ROLE_STAFF') %}
+							<th scope="col">Email User</th>				
+						{% endif %}				
+						<th scope="col">Total Price Order</th>
+						<th scope="col">Date Order</th>
+						<th scope="col">Status</th>
+						<th scope="col">Menu</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for o in orders %}
+						<tr class="row-order{{o.id}}">
+							<th scope="row">{{o.id}}</th>
+							{% if is_granted('ROLE_STAFF') %}
+								<th scope="row">{{o.User.email}}</th>										
+							{% endif %}	
+							<td>{{o.totalPrice}}$</td>
+							<td>{{o.orderDate|date('Y-m-d H:i:s')}}</td>
+							<td>
+								{% if o.status == 'Cancel order'%}
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" name="status{{o.id}}" id="inlineRadio1" value="toPay" checked>
+										<label class="form-check-label" for="inlineRadio1">Cancel order</label>
+									</div>
+								{% else %}
+									{% if o.status == 'To Pay' %}
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="status{{o.id}}" id="inlineRadio1" value="toPay" checked>
+											<label class="form-check-label" for="inlineRadio1">To Pay</label>
+										</div>
+									{% else %}
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="status{{o.id}}" id="inlineRadio1" value="toPay" disabled>
+											<label class="form-check-label" for="inlineRadio1">To Pay</label>
+										</div>
+									{% endif %}
+
+									{% if o.status == 'To Receive' %}
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="status{{o.id}}" id="inlineRadio2" value="toReceive" checked>
+											<label class="form-check-label" for="inlineRadio2">To Receive</label>
+										</div>
+									{% else %}
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="status{{o.id}}" id="inlineRadio2" value="toReceive" disabled>
+											<label class="form-check-label" for="inlineRadio2">To Receive</label>
+										</div>
+									{% endif %}
+
+									{% if o.status == 'Received' %}
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="status{{o.id}}" id="inlineRadio3" value="received" checked>
+											<label class="form-check-label" for="inlineRadio3">Received</label>
+										</div>
+									{% else %}
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="status{{o.id}}" id="inlineRadio3" value="received" disabled>
+											<label class="form-check-label" for="inlineRadio3">Received</label>
+										</div>
+									{% endif %}
+								{% endif %}
+							</td>
+
+							<td>
+								<a class="btn btn-secondary" href="{{ path('show_order_detail',{'id': o.id}) }}">Detail order</a>
+								{% if is_granted('ROLE_STAFF') == false %}
+									{% if o.status == 'To Receive' %}
+										<a class="btn btn-success" href="{{ path('received_order_detail',{'id': o.id}) }}">Received order</a>
+									{% else %}
+										<a class="btn btn-success disabled" href="{{ path('received_order_detail',{'id': o.id}) }}">Received order</a>						
+									{% endif %}						
+								{% endif %}
+								{% if is_granted('ROLE_STAFF') %}
+									{% if o.status != 'To Receive' %}
+										<a class="btn btn-success" href="{{ path('staff_verifyorder',{'id' : o.id}) }}">Accept order</a>
+									{% else %}
+										<a class="btn btn-success disabled" href="{{ path('staff_verifyorder',{'id' : o.id}) }}">Accept order</a>
+									{% endif %}
+								{% endif %}
+								{% if is_granted('ROLE_STAFF') %}	
+									<a class="btn btn-danger" href="{{ path('staff_cancelorder',{'id' : o.id}) }}">Cancel order staff</a>
+								{% endif %}
+								{% if is_granted('ROLE_STAFF') == false %}
+									{% if o.status != 'Cancel order' and o.status != 'Received'%}
+										<a class="btn btn-danger" href="{{ path('user_cancelorder',{'id' : o.id}) }}">Cancel order user</a>
+									{% else %}
+										<a class="btn btn-danger disabled" href="{{ path('user_cancelorder',{'id' : o.id}) }}">Cancel order user</a>
+									{% endif %}
+								{% endif %}
+
+							</td>
+						</tr>
+
+					{% endfor %}
+
+				</tbody>
+			</table>
+		</div>	
+	</div>
+{% endblock %}

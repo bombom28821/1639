@@ -24,6 +24,7 @@ class HomeController extends AbstractController
             'categories' => $categories,
             'books' => $books,
             'idCategory' => false,
+            'checkHome' => true
         ]);
     }
     #[Route('/book/{id}', name: 'detail_book_user')]
@@ -51,7 +52,8 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', [
             'categories' => $categories,
             'books' => $books,
-            'idCategory' => $id
+            'idCategory' => $id,
+            'checkHome' => true,
         ]);
     }
     /**
@@ -106,6 +108,7 @@ class HomeController extends AbstractController
     #[Route('cart/order', name: 'order_cart')]
     public function orderCart()
     {
+        
         $idBooks = $_POST['idBooks'];
         $orderQuantityForm = $_POST['orderQuantity'];
 
@@ -134,11 +137,7 @@ class HomeController extends AbstractController
             $book = $this->getDoctrine()->getRepository(Book::class)->find($idBooks[$i]);
             $this->createOrderDetail($order, $book, $orderQuantity[$i]);
         }
-        return $this->render('home/order.html.twig', [
-            'idBooks' => $idBooks,
-            'orderQuantity' => $orderQuantity,
-            'totalPrice' =>  $totalPrice,
-        ]);
+        return $this->redirectToRoute('show_order');
     }
     public function createOrder($User, $totalPrice)
     {
@@ -168,5 +167,19 @@ class HomeController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $manager->persist($orderDetail);
         $manager->flush();
+    }
+    #[Route('books/search', name: 'search_book')]
+    public function searchBookAction(Request $request)
+    {
+        $name = $request->query->get('name');
+        $categories = $this->getDoctrine()->getRepository(Category::class)->findAll();
+        $books = $this->getDoctrine()->getRepository(Book::class)->findBy(array('name' => $name));
+
+        return $this->render('home/index.html.twig', [
+            'categories' => $categories,
+            'books' => $books,
+            'idCategory' => false,
+            'checkHome' => true,
+        ]);
     }
 }

@@ -1,0 +1,12 @@
+.order{
+    display: flex;
+}
+.profile_top{
+    display: flex;
+}
+.profile_img img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    
+}

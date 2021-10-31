@@ -1,0 +1,105 @@
+{% extends "base.html.twig" %}
+{% block styleCSS %}
+	<style>
+
+		#book_Author input {
+			margin-right: 10px;
+		}
+		#book_Author label {
+			margin-right: 50px;
+		}
+	</style>
+{% endblock %}
+{% block body %}
+	<div class="container-fluid col-7 mt-3">
+		<h2 class="text-center mt-5">
+			{% if edit %}
+				EDIT BOOK
+			{% else %}
+				ADD NEW BOOK
+			{% endif %}
+		</h2>
+		{{form_start(form)}}
+		<div class="form-group">
+			{{form_label(form.name)}}
+			{{form_widget(form.name,
+                        {
+                            'attr' : {'class': 'form-control mb-3'}
+                        })
+                    }}
+		</div>
+		<div class="form-group">
+			{{form_label(form.description)}}
+			{{form_widget(form.description,
+                        {
+                            'attr' : {'class': 'form-control mb-3'}
+                        })
+                    }}
+		</div>
+		<div class="form-group">
+			{{form_label(form.price)}}
+			{{form_widget(form.price,
+                        {
+                            'attr' : {'class': 'form-control mb-3'}
+                        })
+                    }}
+		</div>
+		<div class="form-group">
+			{{form_label(form.quantity)}}
+			{{form_widget(form.quantity,
+                        {
+                            'attr' : {'class': 'form-control mb-3'}
+                        })
+                    }}
+		</div>
+		{% if edit %}
+		{% if orderQuantity > 0 %}
+			<span class="text-danger mb-3">You must edit quantity greater {{orderQuantity}}</span>		
+		{% endif %}
+		
+		{% endif %}
+		<div class="mb3"></div>
+		<div class="form-group">
+			{{form_label(form.cover)}}
+			{{form_widget(form.cover,
+                        {
+                            'attr' : {'class': 'form-control mb-3'}
+                        })
+                    }}
+		</div>
+		<div class="form-group">
+			{{form_label(form.manufacturer)}}
+			{{form_widget(form.manufacturer,
+                        {
+                            'attr' : {'class': 'form-control mb-3'}
+                        })
+                    }}
+		</div>
+		<div class="form-group">
+			{{form_label(form.Author)}}
+			{{form_widget(form.Author,
+                        {
+                            'attr' : {'class': 'form-control mb-3'}
+                        })
+                    }}
+		</div>
+		<div class="form-group">
+			{{form_label(form.Category)}}
+			{{form_widget(form.Category,
+                        {
+                            'attr' : {'class': 'form-control mb-3'}
+                        })
+                    }}
+		</div>
+		<div class="form-group text-center mt-3">
+			<button class="btn btn-primary" type="submit">
+				{% if edit %}
+					SAVE
+				{% else %}
+					ADD
+				{% endif %}
+			</button>
+		</div>
+		{{form_end(form)}}
+	</div>
+{% endblock %}

@@ -6,6 +6,7 @@
 parameters:
         book_cover: '%kernel.project_dir%/public/images/book'
         author_avatar: '%kernel.project_dir%/public/images/author'
+        user_avatar: '%kernel.project_dir%/public/images/user'
 services:
     # default configuration for services in *this* file
     _defaults:

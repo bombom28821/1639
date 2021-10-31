@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrderDetailRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,11 +30,13 @@ class OrderDetail
     private $Order;
 
     /**
-     * @ORM\OneToOne(targetEntity=Book::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity=Book::class)
      */
     private $Book;
-
+    public function __construct()
+    {
+        $this->Book = new ArrayCollection();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -62,7 +66,7 @@ class OrderDetail
         return $this;
     }
 
-    public function getBook(): ?Book
+    public function getBook()
     {
         return $this->Book;
     }
