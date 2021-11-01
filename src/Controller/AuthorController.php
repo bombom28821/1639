@@ -4,12 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Author;
 use App\Form\AuthorType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+/**
+ * @IsGranted("ROLE_STAFF")
+ */
 #[Route('/author')]
 class AuthorController extends AbstractController
 {
@@ -21,7 +25,6 @@ class AuthorController extends AbstractController
             'authors' => $authors,
         ]);
     }
-
     #[Route('/author/detail/{id}', name: 'detail_author')]
     public function authorDetailAction($id)
     {
@@ -38,7 +41,6 @@ class AuthorController extends AbstractController
             );
         }
     }
-
     #[Route('/delete/{id}', name: 'delete_author')]
     public function deleteAuthorAction($id)
     {
@@ -53,7 +55,6 @@ class AuthorController extends AbstractController
         }
         return $this->redirectToRoute('index_author');
     }
-
     #[Route('/add', name: 'add_author')]
     public function addAuthorAction(Request $request)
     {
@@ -97,7 +98,6 @@ class AuthorController extends AbstractController
             ]
         );
     }
-    
     #[Route('/edit/{id}', name: 'edit_author')]
     public function editAuthorAction(Request $request, $id)
     {
