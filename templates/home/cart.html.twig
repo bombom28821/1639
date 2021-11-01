@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home Shopping Cart
+{% endblock %}
+{% block styleCSS %}
+	<link rel="stylesheet" href="/css/styleCart.css">
+{% endblock %}
+{% block body %}
+	<div class="container">
+		<div class="cart_head">
+			<p>Product</p>
+			<ul>
+				<li>Unit price</li>
+				<li>Unit price</li>
+				<li>Operation</li>
+			</ul>
+		</div>
+		<form method="post" action="{{ path('order_cart')}}">
+			<div class="cart_product">
+				{% for b in books %}
+					<div class="cart_content">
+						{% if b.quantity - b.orderQuantity > 0 %}
+							<input class="form-check-input cart_check" type="checkbox" value={{b.id}} name="idBooks[]">
+						{% else %}
+							<input class="form-check-input cart_check" type="checkbox" disabled>
+						{% endif %}
+						<img src="{{ asset('images/book/'~b.cover) }}" alt="book">
+						<div class="cart_title">
+							<p class="cart_name">{{b.name}}</p>
+							<p>{{b.description}}</p>
+						</div>
+						<p class="priceBook" id="{{ b.id }}">{{b.price}}$</p>
+						{% if b.quantity - b.orderQuantity > 0 %}
+							<input class="cart_quantity" type="number" name="orderQuantity[]" value="1" min="1" max={{ b.quantity - b.orderQuantity }}>
+						{% else %}
+							<span class="text-danger text-soldOut" style="margin: 0 80px;">SOLD OUT</span>
+						{% endif %}
+						
+						<a class="cart_remove" href=" {{ path('remove_cart',{'id' : b.id} ) }} ">Remove Cart</a>
+					</div>
+					<div class="cart_line"></div>
+				{% endfor %}
+			</div>
+			<div class="total_order">
+				<h2>Total payment(product):
+					<span class="total-price">0</span>
+					<span>$</span>
+				</h2>
+				<button class="btn-order" type="submit">Đặt hàng</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script>
+		let [...inputCheckBooks] = document.querySelectorAll('.cart_product input[name="idBooks[]"]')
+let inputOrders = document.querySelectorAll('.cart_product input[type="number"]')
+let priceBook = document.querySelectorAll('.priceBook')
+let btnOrder = document.querySelector('.btn-order')
+let totalPrice = document.querySelector('.total-price')
+let total = 0;
+let priceOld = [];
+
+for (let i = 0; i < inputCheckBooks.length; i++) {
+let valueMin = parseInt(inputOrders[i].min)
+let valueMax = parseInt(inputOrders[i].max)
+inputOrders[i].onchange = () => {
+let valueOrder = parseInt(inputOrders[i].value)
+
+if (valueOrder > valueMax) {
+inputOrders[i].value = valueMax
+} else if (valueOrder < valueMin) {
+inputOrders[i].value = valueMin
+} else {}
+}
+inputCheckBooks[i].oninput = () => {
+if (inputCheckBooks[i].checked) {
+let totalOneInput = inputOrders[i].value * parseFloat(priceBook[i].innerHTML);
+priceOld[i] = totalOneInput;
+total += totalOneInput;
+
+totalPrice.innerHTML = total.toFixed(2);
+inputOrders[i].onchange = () => {
+let valueOrder = parseInt(inputOrders[i].value)
+
+if (valueOrder > valueMax) {
+inputOrders[i].value = valueMax
+} else if (valueOrder < valueMin) {
+inputOrders[i].value = valueMin
+} else {}
+
+if (inputCheckBooks[i].checked) {
+total -= priceOld[i];
+let priceNew = inputOrders[i].value * parseFloat(priceBook[i].innerHTML);
+priceOld[i] = priceNew;
+total += priceNew;
+
+totalPrice.innerHTML = total.toFixed(2);
+}
+}
+} else {
+total -= inputOrders[i].value * parseFloat(priceBook[i].innerHTML);
+totalPrice.innerHTML = total.toFixed(2);
+}
+}
+}
+
+btnOrder.onclick = () => {
+for (let i = 0; i < inputCheckBooks.length; i++) {
+if (!inputCheckBooks[i].checked) {
+inputOrders[i].value = null;
+}
+}
+}
+	</script>
+
+{% endblock %}

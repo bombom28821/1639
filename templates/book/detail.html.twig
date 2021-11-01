@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container mt-3">
+		<h1>Book Detail</h1>
+		<a class="btn btn-success mt-2" href="{{ path('index_book') }}">BOOK LIST</a>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Name</th>
+					<th scope="col">Cover</th>
+					<th scope="col">Price</th>
+					<th scope="col">Quantity</th>
+					<th scope="col">Order Quantity</th>
+					<th scope="col">Category</th>
+					<th scope="col">Author</th>
+					<th scope="col">Menu</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{book.id}}</td>
+					<td>{{book.name}}</td>
+					<td>
+						<img src="{{ asset('images/book/'~book.cover )}}" alt="avatar" width="100" height="120">
+					</td>
+					<td>{{ book.price }}</td>
+					<td>{{ book.quantity }}</td>
+					<td>{{ book.orderQuantity }}</td>
+					<td>{{ book.category.name }}</td>
+					<td>
+						{% for a in book.author %}
+							<a href="{{ path('detail_author', {'id': a.id}) }}">
+								{{ a.name }}
+							</a>
+							<br>
+						{% endfor %}
+					</td>
+					<td>
+						<a class="btn btn-info" href="{{ path('edit_book', {'id' : book.id }) }}">EDIT</a>
+						<a class="btn btn-warning" href="{{ path('delete_book', {'id' : book.id }) }}" onclick="return confirm('Are you sure you want to delete this book ?')">DELETE</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

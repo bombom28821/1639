@@ -4,12 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Form\BookType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
+/**
+ * @IsGranted("ROLE_STAFF")
+ */
 #[Route('/book')]
 class BookController extends AbstractController
 {
@@ -21,7 +25,6 @@ class BookController extends AbstractController
             'books' => $books,
         ]);
     }
-
     #[Route('/book/detail/{id}', name: 'detail_book')]
     public function bookDetailAction($id)
     {
@@ -38,14 +41,18 @@ class BookController extends AbstractController
             );
         }
     }
-
     #[Route('/delete/{id}', name: 'delete_book')]
     public function deleteBookAction($id)
     {
         $book = $this->getDoctrine()->getRepository(Book::class)->find($id);
+        $orderQuantity = $book->getOrderQuantity();
         if (!$book) {
             $this->addFlash('Error', 'Book not found!');
         } else {
+            if($orderQuantity > 0){
+                $this->addFlash('Error', "Can't delete!Book already has an order");
+                return $this->redirectToRoute('index_book');
+            }
             $manager = $this->getDoctrine()->getManager();
             $manager->remove($book);
             $manager->flush();
@@ -53,7 +60,10 @@ class BookController extends AbstractController
         }
         return $this->redirectToRoute('index_book');
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> c6a27dd96bc86ddc984f4d1477398310887ff0b1
     #[Route('/add', name: 'add_book')]
     public function addbookAction(Request $request)
     {
@@ -82,7 +92,11 @@ class BookController extends AbstractController
             }
             //B6: lưu tên vào database
             $book->setCover($imageName);
+<<<<<<< HEAD
             $book->setOrderQuantity(0);
+=======
+            $book->addOrderQuantity(0);
+>>>>>>> c6a27dd96bc86ddc984f4d1477398310887ff0b1
             $manager = $this->getDoctrine()->getManager();
             $manager->persist($book);
             $manager->flush();
@@ -98,7 +112,10 @@ class BookController extends AbstractController
             ]
         );
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> c6a27dd96bc86ddc984f4d1477398310887ff0b1
     #[Route('/edit/{id}', name: 'edit_book')]
     public function editBookAction(Request $request, $id)
     {
@@ -161,4 +178,8 @@ class BookController extends AbstractController
             );
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> c6a27dd96bc86ddc984f4d1477398310887ff0b1

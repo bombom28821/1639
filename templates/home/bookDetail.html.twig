@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home Shopping Cart
+{% endblock %}
+
+{% block body %}
+	<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No .</th>
+      <th scope="col">Avatar</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Category</th>
+      <th scope="col">Author</th>
+      <th scope="col">Manufacturer</th>
+      <th scope="col">#</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <th>
+	  	<img src="{{ asset('images/book/'~book.cover) }}" alt="book" width="120" height="150">
+	  </th>
+      <td>{{ book.name }}</td>
+      <td>{{ book.price }}USD</td>
+      <td>
+	  	    {% if book.quantity - book.orderQuantity > 0 %}
+                {{book.quantity - book.orderQuantity}}
+                                    
+            {% else %}
+                <span class="text-danger">SOLD OUT</span>
+            {% endif %}
+	  </td>
+      <td>{{ book.category.name }}</td>
+      <td>
+	  		{% for b in book.author %}
+				{% if b == book.author|last %}
+					{{ b.name }}
+				{% else %}
+					{{ b.name }},
+				{% endif %}
+			{% endfor %}
+	  </td>
+      <td>{{ book.manufacturer }}</td>
+      <td>
+			{% if book.quantity - book.orderQuantity > 0 %}
+				{% if is_granted('ROLE_STAFF') == false and is_granted('ROLE_ADMIN') == false %}
+					{% set bookInCart = false %}
+					{% if app.user %}
+						{% for idBook in app.user.cart %}
+							{% if idBook == book.id %}
+								{% set bookInCart = true %}
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					{% if bookInCart == false %}
+						<a class='btn btn-success' href=" {{ path('add_cart',{'id' : book.id} ) }} ">Add Cart</a>
+					{% else %}
+						<a class='btn btn-danger' href=" {{ path('remove_cart',{'id' : book.id} ) }} ">Remove Cart</a>
+					{% endif %}
+				{% endif %}
+			{% else %}
+				<span class="text-danger">SOLD OUT</span>
+			{% endif %}
+	  </td>
+
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

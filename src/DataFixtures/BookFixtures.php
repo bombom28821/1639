@@ -19,6 +19,7 @@ class BookFixtures extends Fixture
             $book->setCover("cover.jpg");
             $book->setQuantity(rand(10,20));
             $book->setPrice(23.12);
+            $book->addOrderQuantity(0);
             $book->setManufacturer("Kim Dong");
 
             $manager->persist($book);

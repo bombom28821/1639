@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CREATE STAFF
+{% endblock %}
+
+{% block body %}
+	<h2 class="text-center mt-5">
+		{% if edit %}
+			EDIT STAFF
+		{% else %}
+			ADD NEW STAFF
+		{% endif %}
+	</h2>
+
+	<div class="form-group container">
+		{{ form_start(form) }}
+		{{ form_row(form.name, {
+                    'attr': {'class': 'form-control mb-3 '},
+                }) }}
+		{{ form_row(form.avatar, {
+                    'attr': {'class': 'form-control mb-3'},
+                }) }}
+		{{ form_row(form.address, {
+                    'attr': {'class': 'form-control mb-3'},
+                }) }}
+		{{ form_row(form.date, {
+                    'attr': {'class': 'form-control mb-3'},
+                }) }}
+		{{ form_row(form.email,{
+                    'attr': {'class': 'form-control mb-3'},
+                }) }}
+		{% if edit %}
+			{{ form_row(form.plainPassword, {
+                'attr': {'class': 'form-control mb-3'},
+                label: 'New Password'
+        }) }}
+		{% else %}
+			{{ form_row(form.plainPassword, {
+                'attr': {'class': 'form-control'},
+                label: 'Password'
+        }) }}
+
+		{% endif %}
+
+
+		<button type="submit" class="btn btn-primary">
+			{% if edit %}
+				SAVE
+			{% else %}
+				ADD
+			{% endif %}
+		</button>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}
